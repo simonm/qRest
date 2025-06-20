@@ -1,0 +1,66 @@
+# qRest Configuration File
+# Bridging SQL and REST APIs through intelligent discovery
+
+[server]
+host = "localhost"
+port = 8080
+
+[server.cors]
+allow_origins = ["*"]
+allow_methods = ["GET", "POST", "OPTIONS"]
+allow_headers = ["Content-Type", "Authorization"]
+
+# Example API configurations
+[[apis]]
+name = "petstore"
+description = "Swagger Petstore API"
+spec_url = "https://petstore.swagger.io/v2/swagger.json"
+base_url = "https://petstore.swagger.io/v2"
+timeout = "30s"
+
+[apis.auth]
+type = "apikey"
+token = "special-key"
+header = "X-API-Key"
+
+[apis.retry]
+attempts = 3
+delay = "1s"
+
+[apis.cache]
+enabled = true
+ttl = "5m"
+
+[[apis]]
+name = "jsonplaceholder"
+description = "JSONPlaceholder REST API"
+spec_url = "https://jsonplaceholder.typicode.com/openapi.json"
+base_url = "https://jsonplaceholder.typicode.com"
+timeout = "15s"
+
+[apis.auth]
+type = "none"
+
+[[apis]]
+name = "github"
+description = "GitHub REST API"
+spec_url = "https://api.github.com/openapi.json"
+base_url = "https://api.github.com"
+timeout = "30s"
+
+[apis.auth]
+type = "bearer"
+token = "${GITHUB_TOKEN}"  # Environment variable
+
+# Global defaults
+[defaults]
+max_limit = 1000
+default_limit = 100
+timeout = "30s"
+cache_ttl = "5m"
+
+# Logging configuration
+[logging]
+level = "info"    # debug, info, warn, error
+format = "text"   # text, json
+file = ""         # empty for stdout
